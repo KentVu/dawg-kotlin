@@ -3,6 +3,7 @@ package org.chalup.dawg
 import okio.Sink
 import okio.Source
 import okio.buffer
+import kotlin.jvm.JvmStatic
 
 class Dawg
 internal constructor(private val nodeReader: NodeReader) {

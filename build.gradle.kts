@@ -2,9 +2,36 @@ plugins {
    kotlin("multiplatform")
 }
 
-group = 'org.chalup'
-version = '1.0-SNAPSHOT'
+kotlin {
+    jvm()
+    js(IR) {
+        browser()
+    }
+
+    sourceSets {
+        named("commonMain") {
+            dependencies {
+                implementation("com.squareup.okio:okio:3.2.0")
+            }
+        }
+        named("jvmMain") {
+            dependencies {
+                implementation("com.beust:jcommander:1.78")
+            }
+        }
+        named("jvmTest") {
+            dependencies {
+                implementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")/*testRuntimeOnly*/
+                implementation("com.google.truth:truth:1.0")
+            }
+        }
+    }
+}
+
 /*
+group = "org.chalup"
+version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
@@ -30,17 +57,3 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 */
-
-kotlin {
-    jvm()
-    js(IR) {
-        browser()
-    }
-
-    sourceSets {
-        named("commonMain") {
-            api("com.squareup.okio:okio:2.3.0")
-            implementation "com.beust:jcommander:1.78"
-        }
-    }
-}
