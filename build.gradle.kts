@@ -1,10 +1,10 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+   kotlin("multiplatform")
 }
 
-group 'org.chalup'
-version '1.0-SNAPSHOT'
-
+group = 'org.chalup'
+version = '1.0-SNAPSHOT'
+/*
 repositories {
     mavenCentral()
 }
@@ -28,4 +28,19 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+*/
+
+kotlin {
+    jvm()
+    js(IR) {
+        browser()
+    }
+
+    sourceSets {
+        named("commonMain") {
+            api("com.squareup.okio:okio:2.3.0")
+            implementation "com.beust:jcommander:1.78"
+        }
+    }
 }
