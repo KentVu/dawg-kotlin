@@ -2,7 +2,7 @@ package org.chalup.dawg
 
 import com.google.common.truth.Truth
 import okio.Buffer
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 class DawgTest {
     @Test
@@ -41,6 +41,18 @@ class DawgTest {
         val dawg = Dawg.generate(words)
 
         Truth.assertThat("abrakadabra" in dawg).isFalse()
+    }
+
+    @Test
+    fun `prefix search dawg`() {
+        val dawg = Dawg.generate(words)
+
+        Truth.assertThat(dawg.prefixSearch("sk")).containsExactlyElementsIn(
+            listOf(
+                "skive",
+                "skives"
+            )
+        )
     }
 
     companion object {

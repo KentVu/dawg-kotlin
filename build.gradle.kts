@@ -1,9 +1,15 @@
 plugins {
    kotlin("multiplatform")
+//    application
 }
 
 kotlin {
-    jvm()
+    jvm {
+        testRuns["test"].executionTask.configure {
+            useTestNG()
+//            useJUnitPlatform()
+        }
+    }
     js(IR) {
         browser()
     }
@@ -14,6 +20,11 @@ kotlin {
                 implementation("com.squareup.okio:okio:3.2.0")
             }
         }
+//        val commonTest by getting {
+//            dependencies {
+//                implementation(kotlin("test")) // This brings all the platform dependencies automatically
+//            }
+//        }
         named("jvmMain") {
             dependencies {
                 implementation("com.beust:jcommander:1.78")
@@ -21,13 +32,16 @@ kotlin {
         }
         named("jvmTest") {
             dependencies {
-                implementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")/*testRuntimeOnly*/
+                implementation(kotlin("test")) // This brings all the platform dependencies automatically
                 implementation("com.google.truth:truth:1.0")
             }
         }
     }
 }
+
+//application {
+//    mainClass.set("org.chalup.dawg.DawgGeneratorKt")
+//}
 
 /*
 group = "org.chalup"

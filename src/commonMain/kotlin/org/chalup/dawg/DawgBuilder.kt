@@ -1,8 +1,6 @@
 package org.chalup.dawg
 
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.security.MessageDigest
+import okio.Buffer
 
 typealias Logger = (() -> String) -> Unit
 
@@ -178,29 +176,30 @@ internal class DawgBuilder(private val log: Logger = {}) {
  * for our concrete use case to save some allocations and CPU time: it's not thread safe and it's not reentrant safe.
  */
 private object Hasher {
-    private val digest = MessageDigest.getInstance("SHA-1")
-    private val scratch = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN)
+    private val scratch = Buffer()
+    //private val digest = hashing
 
     fun put(value: Boolean) = apply {
-        val byte: Byte = if (value) 1 else 0
-        digest.update(byte)
+        val byte: Int = if (value) 1 else 0
+        scratch.writeByte(byte)
     }
 
     fun put(value: Char) = apply {
-        scratch.putChar(value)
-        try {
-            digest.update(scratch.array(), 0, Char.SIZE_BYTES)
-        } finally {
-            scratch.clear()
-        }
+        scratch.writeUtf8("$value")
+//        try {
+//            digest.update(scratch.array(), 0, Char.SIZE_BYTES)
+//        } finally {
+//            scratch.clear()
+//        }
     }
 
     fun put(value: ByteArray) = apply {
-        digest.update(value)
+        scratch.write(value)
+//        digest.update(value)
     }
 
     fun hash(): HashCode {
-        return HashCode(digest.digest())
+        return HashCode(scratch.sha1().toByteArray())
     }
 
     class HashCode(val data: ByteArray) {

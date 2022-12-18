@@ -39,6 +39,34 @@ internal constructor(private val nodeReader: NodeReader) {
         flush()
     }
 
+    fun prefixSearch(prefix: String): List<String> {
+        var nodeIndex = 0
+        var charIndex = 0
+        val result = mutableListOf<String>()
+        val path = mutableListOf<Char>()
+
+        do {
+            val node = nodeReader[nodeIndex]
+
+            if (node.letter == prefix[charIndex]) {
+                path += node.letter
+                nodeIndex = node.firstChildIndex
+                if (charIndex + 1 == prefix.length) {
+                    nodeReader.findWords(nodeIndex, prefix, result)
+                    break
+                } else {
+                    charIndex += 1
+                }
+            } else if (!node.lastChild) {
+                nodeIndex += 1
+            } else {
+                nodeIndex = 0
+            }
+        } while (nodeIndex != 0)
+
+        return result
+    }
+
     companion object {
         @JvmStatic
         fun decode(source: Source): Dawg = with(source.buffer()) {
