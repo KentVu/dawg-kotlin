@@ -33,7 +33,7 @@ kotlin {
         named("jvmTest") {
             dependencies {
                 implementation(kotlin("test")) // This brings all the platform dependencies automatically
-                implementation("com.google.truth:truth:1.0")
+                implementation("com.google.truth:truth:1.1.3")
             }
         }
     }

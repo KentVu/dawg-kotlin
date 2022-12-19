@@ -43,16 +43,21 @@ internal constructor(private val nodeReader: NodeReader) {
         var nodeIndex = 0
         var charIndex = 0
         val result = mutableListOf<String>()
-        val path = mutableListOf<Char>()
+        val path = mutableListOf<Node>()
 
         do {
             val node = nodeReader[nodeIndex]
 
             if (node.letter == prefix[charIndex]) {
-                path += node.letter
+                path += node
                 nodeIndex = node.firstChildIndex
                 if (charIndex + 1 == prefix.length) {
-                    nodeReader.findWords(nodeIndex, prefix, result)
+                    if (node.endOfWord) {
+                        result.add(prefix)
+                    }
+                    if (nodeIndex != 0) {
+                        nodeReader.findWords(nodeIndex, prefix, result)
+                    }
                     break
                 } else {
                     charIndex += 1
@@ -65,6 +70,29 @@ internal constructor(private val nodeReader: NodeReader) {
         } while (nodeIndex != 0)
 
         return result
+    }
+
+    fun containsPrefix(prefix: String): Boolean {
+        var nodeIndex = 0
+        var charIndex = 0
+
+        do {
+            val node = nodeReader[nodeIndex]
+
+            if (node.letter == prefix[charIndex]) {
+                nodeIndex = node.firstChildIndex
+                charIndex += 1
+                if (charIndex == prefix.length) {
+                    return true
+                }
+            } else if (!node.lastChild) {
+                nodeIndex += 1
+            } else {
+                nodeIndex = 0
+            }
+        } while (nodeIndex != 0)
+
+        return false
     }
 
     companion object {
