@@ -1,5 +1,5 @@
 plugins {
-   kotlin("multiplatform")
+    alias(libs.plugins.kotlin.multiplatform)
 //    application
 }
 
@@ -10,14 +10,14 @@ kotlin {
 //            useJUnitPlatform()
         }
     }
-    js(IR) {
+    /*js(IR) {
         browser()
-    }
+    }*/
 
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation("com.squareup.okio:okio:3.2.0")
+                api(libs.okio)
             }
         }
 //        val commonTest by getting {
