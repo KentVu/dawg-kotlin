@@ -10,9 +10,9 @@ kotlin {
 //            useJUnitPlatform()
         }
     }
-    /*js(IR) {
+    js(IR) {
         browser()
-    }*/
+    }
 
     sourceSets {
         named("commonMain") {
